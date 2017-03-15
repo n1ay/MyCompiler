@@ -41,12 +41,16 @@ std::string toPostfix(std::string infix) {
 			stack.pop();
 			i++;
 		} else if (infix[i] == '+' || infix[i]  == '-') {
-			while(!stack.empty() && hasOperatorLowerPrecedence(stack.top(), 1)) {
-				result += stack.top() + " ";
-				stack.pop();
+			if(i == 0 || infix[i-1] == '(') {
+				result += "0 ";
+			} else {
+				while(!stack.empty() && hasOperatorLowerPrecedence(stack.top(), 1)) {
+					result += stack.top() + " ";
+					stack.pop();
+				}
 			}
-			stack.push(std::string(1, infix[i]));
-			i++;
+				stack.push(std::string(1, infix[i]));
+				i++;
 		} else if (infix[i] == '*' || infix[i] == '/') {
 			while(!stack.empty() && hasOperatorLowerPrecedence(stack.top(), 2)) {
 							result += stack.top() + " ";
