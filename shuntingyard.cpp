@@ -9,9 +9,7 @@
  *
  */
 
-#include <stack>
-#include <ctype.h>
-#include <iostream>
+#include "shuntingyard.hpp"
 
 /*
  * Postfix notation uses space as a delimiter
@@ -23,6 +21,7 @@ std::string toPostfix(std::string infix) {
 	std::string number;
 
 	int length = infix.length();
+
 	for(int i=0; i<length;) {
 		if(isdigit(infix[i])) {
 			while(isdigit(infix[i]) || infix[i] == '.') {
@@ -42,13 +41,17 @@ std::string toPostfix(std::string infix) {
 			stack.pop();
 			i++;
 		} else if (infix[i] == '+' || infix[i]  == '-') {
-			while(!stack.empty() && (stack.top() == "*" || stack.top() == "/")) {
+			while(!stack.empty() && hasOperatorLowerPrecedence(stack.top(), 1)) {
 				result += stack.top() + " ";
 				stack.pop();
 			}
 			stack.push(std::string(1, infix[i]));
 			i++;
 		} else if (infix[i] == '*' || infix[i] == '/') {
+			while(!stack.empty() && hasOperatorLowerPrecedence(stack.top(), 2)) {
+							result += stack.top() + " ";
+							stack.pop();
+						}
 			stack.push(std::string(1, infix[i]));
 			i++;
 		}
@@ -64,6 +67,20 @@ std::string toPostfix(std::string infix) {
 	}
 
 	return result;
+}
+
+bool hasOperatorLowerPrecedence(std::string op, int precedence) {
+	switch(precedence) {
+	case 1:
+		return (op == std::string("+")) + (op == std::string("-")) + (op == std::string("*")) + (op == std::string("/"));
+		break;
+	case 2:
+		return (op == std::string("*")) + (op == std::string("/"));
+		break;
+	default:
+		return false;
+		break;
+	}
 }
 
 double calculate(std::string postfix) {

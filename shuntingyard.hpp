@@ -14,6 +14,7 @@
 
 std::string toPostfix(std::string infix);
 double calculate(std::string postfix);
+bool hasOperatorLowerPrecedence(std::string op, int precedence);
 
 
 #endif /* SHUNTINGYARD_HPP_ */

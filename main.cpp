@@ -10,7 +10,7 @@
 
 int main() {
 
-	std::string expression = "(21-20)*2";
+	std::string expression = "1-2-3";
 
 	std::cout<<toPostfix(expression)<<std::endl;
 	std::cout<<calculate(toPostfix(expression))<<std::endl;
